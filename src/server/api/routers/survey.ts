@@ -30,9 +30,12 @@ export const surveyRouter = createTRPCRouter({
           id: string;
           fields: Record<string, unknown>;
         }[];
-      }>("/appw5JshuvO8zbZnL/tbl8WLNPnQTt6Rn91/");
+      }>(
+        `/appw5JshuvO8zbZnL/tbl8WLNPnQTt6Rn91?fields%5B%5D=User+Email&filterByFormula=%7BUser+Email%7D%3D%22${input["User Email"]}%22`
+      );
 
       const records = recordsResponse.data ?? [];
+
       const isExistingRecord = records.records.some((record) => {
         const email = record.fields["User Email"] as string;
         return email === input["User Email"];
