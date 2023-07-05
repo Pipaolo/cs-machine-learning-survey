@@ -1,10 +1,13 @@
-import type { FormErrorMessageProps, HelpTextProps } from "@chakra-ui/react";
+import type {
+  FormErrorMessageProps,
+  FormHelperTextProps,
+} from "@chakra-ui/react";
 import { FormErrorMessage, FormHelperText } from "@chakra-ui/react";
 import type { FieldError } from "react-hook-form";
 
 interface Props {
   helperText?: string;
-  helperTextProps?: HelpTextProps;
+  helperTextProps?: FormHelperTextProps;
   error?: FieldError;
   errorMessageProps?: FormErrorMessageProps;
 }
