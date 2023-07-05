@@ -1,9 +1,7 @@
+import { Heading } from "@chakra-ui/react";
 import Head from "next/head";
-import Link from "next/link";
-import { SurveyForm } from "~/features/survey/components";
-import { api } from "~/utils/api";
 
-export default function Home() {
+export default function SuccessPage() {
   return (
     <>
       <Head>
@@ -15,7 +13,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-sulu p-4">
-        <SurveyForm />
+        <div className="flex flex-col items-center space-y-4 rounded-md bg-white p-4">
+          <Heading size={"lg"} className="text-center">
+            Success!
+          </Heading>
+          <p className="text-center">
+            Thank you for your submission. We appreciate your time.
+          </p>
+        </div>
       </main>
     </>
   );
