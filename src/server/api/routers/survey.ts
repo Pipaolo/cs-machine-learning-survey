@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { SurveyRecordSchema } from "~/features/survey/types";
+import { AxiosError, AxiosHeaders } from "axios";
 
 export const surveyRouter = createTRPCRouter({
   getRecords: publicProcedure.query(async ({ ctx }) => {
@@ -48,21 +49,41 @@ export const surveyRouter = createTRPCRouter({
         });
       }
 
-      const response = await ctx.axios.post<{
-        fields: Record<string, unknown>;
-      }>("/appw5JshuvO8zbZnL/tbl8WLNPnQTt6Rn91/", {
-        fields: input,
-      });
+      console.log("input", input);
+      try {
+        const response = await ctx.axios.post<{
+          fields: Record<string, unknown>;
+        }>("/appw5JshuvO8zbZnL/tbl8WLNPnQTt6Rn91/", {
+          fields: input,
+          typecast: true,
+        });
 
-      const data = response.data;
+        const data = response.data;
 
-      if (data && data.fields) {
-        return SurveyRecordSchema.parse(data.fields);
+        if (data && data.fields) {
+          return SurveyRecordSchema.parse(data.fields);
+        }
+
+        throw new TRPCError({
+          message: "Failed to create record",
+          code: "BAD_REQUEST",
+        });
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          const axiosError = error as AxiosError;
+          const response = axiosError.response as unknown as {
+            data: {
+              error: {
+                message: string;
+              };
+            };
+          };
+
+          throw new TRPCError({
+            message: `${response?.data?.error?.message}`,
+            code: "BAD_REQUEST",
+          });
+        }
       }
-
-      throw new TRPCError({
-        message: "Failed to create record",
-        code: "BAD_REQUEST",
-      });
     }),
 });
