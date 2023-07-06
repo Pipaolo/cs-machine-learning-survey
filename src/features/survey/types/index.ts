@@ -12,7 +12,10 @@ export const SurveyFormSchema = z.object({
     .string({
       required_error: ValidationErrors.required,
     })
-    .email(ValidationErrors.email)
+    .regex(
+      /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+      ValidationErrors.email
+    )
     // This makes sure that the email is a school email and ends with .edu.ph
     .regex(/\.edu\.ph$/, ValidationErrors.schoolEmail),
   "Music_Top_#1": z.string().min(1, ValidationErrors.required),

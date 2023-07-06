@@ -12,6 +12,7 @@ import { TRPCClientError } from "@trpc/client";
 export const SurveyForm = () => {
   const form = useForm<SurveyFormSchema>({
     resolver: zodResolver(SurveyFormSchema),
+    mode: "all",
   });
   const createRecord = api.survey.createRecord.useMutation();
   const router = useRouter();
