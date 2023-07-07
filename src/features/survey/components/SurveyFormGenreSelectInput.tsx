@@ -3,7 +3,7 @@ import {
   type ControllerProps,
   type FieldName,
 } from "react-hook-form";
-import { type SurveyFormSchema } from "../types";
+import { type SurveyFormPart3Schema, type SurveyFormSchema } from "../types";
 import { FormControl, FormHelperText, FormLabel } from "@chakra-ui/react";
 import Select from "react-select";
 import { type BaseInputProps } from "~/components/types/inputs";
@@ -11,13 +11,13 @@ import FieldErrorMessage from "~/components/inputs/FieldErrorMessage";
 import FieldLabel from "~/components/inputs/FieldLabel";
 
 interface Props extends BaseInputProps {
-  name: FieldName<SurveyFormSchema>;
+  name: FieldName<SurveyFormPart3Schema>;
 
   /// The `control` prop from `useForm` only get the genres as a string, so we
   /// need to use the `Controller` component from `react-hook-form` to get the
   /// genres as an object.
 
-  control: ControllerProps<SurveyFormSchema>["control"];
+  control: ControllerProps<SurveyFormPart3Schema>["control"];
 }
 
 const musicGenres = [
