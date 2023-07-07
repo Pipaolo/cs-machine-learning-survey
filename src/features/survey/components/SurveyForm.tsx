@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   Heading,
+  Progress,
   Step,
   StepDescription,
   StepIcon,
@@ -196,26 +197,19 @@ export const SurveyForm = () => {
         </Text>
       </div>
       <div className="flex flex-col space-y-4">
-        <Stepper size={"sm"} index={stepper.activeStep} colorScheme="green">
-          {steps.map((step, index) => (
-            <Step key={index}>
-              <StepIndicator>
-                <StepStatus
-                  complete={<StepIcon />}
-                  incomplete={<StepNumber />}
-                  active={<StepNumber />}
-                />
-              </StepIndicator>
-
-              <Box flexShrink="0">
-                <StepTitle>{step.title}</StepTitle>
-                <StepDescription>{step.description}</StepDescription>
-              </Box>
-
-              <StepSeparator />
-            </Step>
-          ))}
-        </Stepper>
+        <div className="flex flex-col space-y-4">
+          <span className="text-xl font-bold">
+            Step {stepper.activeStep + 1} |{" "}
+            {steps[stepper.activeStep]?.description}
+          </span>
+          <Progress
+            colorScheme="mongoose"
+            value={stepper.activeStepPercent * 100}
+            rounded={"full"}
+            size={"md"}
+            width="full"
+          />
+        </div>
         {renderContent()}
       </div>
     </div>

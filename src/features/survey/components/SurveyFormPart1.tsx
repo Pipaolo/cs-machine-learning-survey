@@ -110,14 +110,14 @@ export const SurveyFormPart1 = ({ form, ...props }: Props) => {
 
       <div className="flex w-full justify-between">
         <Button
-          className="rounded-full bg-sulu hover:bg-opacity-50"
+          colorScheme="mongoose"
           isDisabled={props.stepper.activeStep === 0}
           onClick={() => props.stepper.goToPrevious()}
         >
           Go Back
         </Button>
         <Button
-          className="rounded-full bg-sulu hover:bg-opacity-50"
+          colorScheme="mongoose"
           isDisabled={!form.formState.isValid}
           type="submit"
         >

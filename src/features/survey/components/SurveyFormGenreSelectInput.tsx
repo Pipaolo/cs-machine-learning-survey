@@ -9,6 +9,7 @@ import Select from "react-select";
 import { type BaseInputProps } from "~/components/types/inputs";
 import FieldErrorMessage from "~/components/inputs/FieldErrorMessage";
 import FieldLabel from "~/components/inputs/FieldLabel";
+import { cn } from "~/utils/styles";
 
 interface Props extends BaseInputProps {
   name: FieldName<SurveyFormPart3Schema>;
@@ -66,6 +67,17 @@ export const SurveyFormGenreSelectInput = (props: Props) => {
                 value: value,
               }}
               name={restProps.name}
+              className=""
+              classNames={{
+                control: (props) =>
+                  cn([
+                    props.isFocused
+                      ? "border-mongoose shadow shadow-mongoose"
+                      : "border-gray-300",
+                  ]),
+                dropdownIndicator: (props) =>
+                  cn([props.isFocused && "text-mongoose"]),
+              }}
               onChange={(newValue) => {
                 field.onChange(newValue?.value ?? "");
               }}

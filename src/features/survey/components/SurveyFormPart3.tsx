@@ -76,7 +76,7 @@ export const SurveyFormPart3 = ({ form, ...props }: Props) => {
         control={control}
         render={({ field }) => (
           <Checkbox
-            colorScheme="green"
+            colorScheme="mongoose"
             isChecked={field.value}
             onChange={field.onChange}
             onBlur={field.onBlur}
@@ -88,14 +88,14 @@ export const SurveyFormPart3 = ({ form, ...props }: Props) => {
       />
       <div className="flex w-full justify-between">
         <Button
-          className="rounded-full bg-sulu hover:bg-opacity-50"
+          colorScheme="mongoose"
           isDisabled={props.stepper.activeStep === 0 || props.isLoading}
           onClick={() => props.stepper.goToPrevious()}
         >
           Go Back
         </Button>
         <Button
-          className="rounded-full bg-sulu hover:bg-opacity-50"
+          colorScheme="mongoose"
           isDisabled={!form.formState.isValid || props.isLoading}
           isLoading={props.isLoading}
           type="submit"

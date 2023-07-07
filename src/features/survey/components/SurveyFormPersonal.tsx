@@ -49,7 +49,7 @@ export const SurveyFormPersonal = ({ form, ...props }: Props) => {
       />
       <div className="flex w-full justify-end">
         <Button
-          className="rounded-full bg-sulu hover:bg-opacity-50"
+          colorScheme="mongoose"
           isDisabled={!form.formState.isValid}
           type="submit"
         >
