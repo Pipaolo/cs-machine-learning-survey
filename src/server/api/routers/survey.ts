@@ -1,9 +1,68 @@
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { SurveyRecordSchema } from "~/features/survey/types";
+import { type SurveyRecord, SurveyRecordSchema } from "~/features/survey/types";
 import { AxiosError, AxiosHeaders } from "axios";
 
+type AirTableListRecordsResponse = {
+  records: {
+    id: string;
+    fields: Record<string, unknown>;
+  }[];
+  offset?: string;
+};
+
 export const surveyRouter = createTRPCRouter({
+  getRecordsForExport: publicProcedure.query(async ({ ctx }) => {
+    const records: SurveyRecord[] = [];
+
+    // To get all records, we need to paginate through the records
+    // The API returns a maximum of 100 records per request
+    // If there are more records, the API will return an offset
+    // We can use the offset to get the next 100 records
+    // We can keep doing this until there are no more records
+    const baseUrl = "/appw5JshuvO8zbZnL/tbl8WLNPnQTt6Rn91/";
+    const initialResponse = await ctx.axios.get<AirTableListRecordsResponse>(
+      baseUrl
+    );
+
+    const initialData = initialResponse.data;
+    if (initialData && initialData.records) {
+      records.push(
+        ...initialData.records.map((record) => {
+          return SurveyRecordSchema.parse(record.fields);
+        })
+      );
+    }
+
+    let hasMoreRecords = !!initialData.offset;
+    let offset = initialData.offset;
+    while (hasMoreRecords) {
+      const response = await ctx.axios.get<AirTableListRecordsResponse>(
+        `${baseUrl}?offset=${offset ?? ""}`
+      );
+
+      const data = response.data;
+
+      if (!data) {
+        break;
+      }
+
+      if (!data.records) {
+        break;
+      }
+
+      records.push(
+        ...data.records.map((record) => {
+          return SurveyRecordSchema.parse(record.fields);
+        })
+      );
+
+      hasMoreRecords = !!data.offset;
+      offset = data.offset;
+    }
+
+    return records;
+  }),
   getRecords: publicProcedure.query(async ({ ctx }) => {
     const response = await ctx.axios.get<{
       records: {
@@ -13,6 +72,7 @@ export const surveyRouter = createTRPCRouter({
     }>("/appw5JshuvO8zbZnL/tbl8WLNPnQTt6Rn91/");
 
     const data = response.data;
+    console.log(data);
 
     if (data && data.records) {
       return data.records.map((record) => {
