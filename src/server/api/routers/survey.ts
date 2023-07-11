@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { type SurveyRecord, SurveyRecordSchema } from "~/features/survey/types";
-import { AxiosError, AxiosHeaders } from "axios";
+import { AxiosError } from "axios";
 
 type AirTableListRecordsResponse = {
   records: {
@@ -12,7 +12,7 @@ type AirTableListRecordsResponse = {
 };
 
 export const surveyRouter = createTRPCRouter({
-  getRecordsForExport: publicProcedure.query(async ({ ctx }) => {
+  export: publicProcedure.mutation(async ({ ctx }) => {
     const records: SurveyRecord[] = [];
 
     // To get all records, we need to paginate through the records

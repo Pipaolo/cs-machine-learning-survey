@@ -3,36 +3,53 @@ import { unparse } from "papaparse";
 import { api } from "~/utils/api";
 import { type SurveyRecord } from "~/features/survey";
 import { Button, Heading, Text, useToast } from "@chakra-ui/react";
+import { TRPCClientError } from "@trpc/client";
 
 const ExportPage = () => {
-  const records = api.survey.getRecordsForExport.useQuery(undefined, {
-    refetchOnWindowFocus: false,
-  });
+  const exportRecords = api.survey.export.useMutation(undefined);
   const toast = useToast();
 
-  const onExportPressed = () => {
-    if (!records.data) {
-      return;
+  const onExportPressed = async () => {
+    try {
+      const records = await exportRecords.mutateAsync();
+      const csv = unparse<SurveyRecord>(records);
+
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.setAttribute("hidden", "");
+      a.setAttribute("href", url);
+      a.setAttribute("download", "survey.csv");
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      toast({
+        title: "Records Exported!",
+        description: `You have successfully exported a total of ${records.length} records.`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      if (error instanceof TRPCClientError) {
+        toast({
+          title: "Error!",
+          description: error.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      }
+      toast({
+        title: "Error!",
+        description: "An error has occurred while exporting records.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
-    const csv = unparse<SurveyRecord>(records.data);
-
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.setAttribute("hidden", "");
-    a.setAttribute("href", url);
-    a.setAttribute("download", "survey.csv");
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    toast({
-      title: "Records Exported!",
-      description: `You have successfully exported a total of ${records.data.length} records.`,
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    });
   };
 
   return (
@@ -56,7 +73,7 @@ const ExportPage = () => {
           <Button
             onClick={onExportPressed}
             colorScheme="mongoose"
-            isLoading={records.isLoading}
+            isLoading={exportRecords.isLoading}
           >
             Export
           </Button>
