@@ -5,6 +5,13 @@ import {
   Text,
   type UseStepsReturn,
   useToast,
+  RadioGroup,
+  Stack,
+  VStack,
+  Radio,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
 } from "@chakra-ui/react";
 import {
   useForm,
@@ -38,6 +45,60 @@ export const SurveyFormPersonal = ({ form, ...props }: Props) => {
         label={"Name"}
         register={register("Name")}
         error={errors["Name"]}
+      />
+      <InputField
+        isRequired
+        label={"Age"}
+        register={register("Age")}
+        error={errors["Age"]}
+        type="number"
+      />
+      {/* Gender Field */}
+      <Controller
+        name="Sex"
+        control={form.control}
+        render={({ field, fieldState }) => {
+          return (
+            <FormControl isInvalid={!!fieldState.error} isRequired>
+              <FormLabel>Sex</FormLabel>
+              <RadioGroup {...field} className="w-full">
+                <VStack alignItems={"start"} w={"full"}>
+                  <Radio colorScheme="mongoose" value="male">
+                    Male
+                  </Radio>
+                  <Radio colorScheme="mongoose" value="female">
+                    Female
+                  </Radio>
+                </VStack>
+              </RadioGroup>
+              {fieldState.error && (
+                <FormErrorMessage>{fieldState.error?.message}</FormErrorMessage>
+              )}
+            </FormControl>
+          );
+        }}
+      />
+      <InputField
+        isRequired
+        label={"College/School"}
+        register={register("School")}
+        error={errors["School"]}
+        helperText="Example: CIIT College of Arts and Technology, AMA Computer College, and etc."
+        type="text"
+      />
+      <InputField
+        isRequired
+        label={"Course"}
+        register={register("Course")}
+        error={errors["Course"]}
+        helperText="Example: BS Computer Science, BS Information Technology, and etc."
+      />
+      <InputField
+        isRequired
+        label={"Year Level"}
+        register={register("YearLevel")}
+        error={errors["YearLevel"]}
+        helperText="Example: 4th Year, 2nd Year, and etc."
       />
       <InputField
         isRequired

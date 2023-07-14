@@ -43,6 +43,9 @@ export const SurveyForm = () => {
 
   const formPart1 = useForm<SurveyFormPart1Schema>({
     resolver: zodResolver(SurveyFormPart1Schema),
+    defaultValues: {
+      Platform: "Spotify",
+    },
     mode: "all",
   });
 

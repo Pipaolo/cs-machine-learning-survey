@@ -1,6 +1,10 @@
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { type SurveyRecord, SurveyRecordSchema } from "~/features/survey/types";
+import {
+  type SurveyRecord,
+  SurveyRecordSchema,
+  SurveyFormSchema,
+} from "~/features/survey/types";
 import { AxiosError } from "axios";
 
 type AirTableListRecordsResponse = {
@@ -83,7 +87,7 @@ export const surveyRouter = createTRPCRouter({
     return [];
   }),
   createRecord: publicProcedure
-    .input(SurveyRecordSchema)
+    .input(SurveyFormSchema)
     .mutation(async ({ ctx, input }) => {
       // Check if the user has already submitted a survey
       const recordsResponse = await ctx.axios.get<{
@@ -138,7 +142,7 @@ export const surveyRouter = createTRPCRouter({
               };
             };
           };
-
+          console.log("Error: ", error);
           throw new TRPCError({
             message: `${response?.data?.error?.message}`,
             code: "BAD_REQUEST",

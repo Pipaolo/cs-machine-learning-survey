@@ -15,6 +15,7 @@ import {
 import { type SurveyFormPart1Schema } from "../types";
 import { InputField } from "~/components";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { SurveyFormPlatformSelectInput } from "./SurveyFormPlatformSelectInput";
 
 interface Props {
   stepper: UseStepsReturn;
@@ -33,10 +34,15 @@ export const SurveyFormPart1 = ({ form, ...props }: Props) => {
       className="flex flex-col space-y-4"
       onSubmit={form.handleSubmit(props.onSubmit)}
     >
+      <SurveyFormPlatformSelectInput
+        label="Music Platform"
+        control={form.control}
+        name="Platform"
+        helperText="Choose your music platform, you may enter a custom platform if it is not listed."
+      />
       <Heading size={"md"}>
         What is your top 10 played music this month?
       </Heading>
-
       <InputField
         isRequired
         label={"Music Top 1"}
